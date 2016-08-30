@@ -107,6 +107,17 @@ describe('markdown-it-attrs', function() {
     assert.equal(res, expected);
   });
 
+  it('should work with nested list', function(){
+    var src = '- item1\n\
+  - item2\n\
+- item3\n\
+{.red}';
+    var expected = '<ul class="red">\n<li>item1\n<ul>\n<li>item2</li>\n</ul>\n</li>\n<li>item3</li>\n</ul>\n';
+    var res = md.render(src);
+    assert.equal(res, expected);
+  });
+
+
   it('should add class to inline code block', function(){
     var src = 'bla `click()`{.c}';
     var expected = '<p>bla <code class="c">click()</code></p>\n';

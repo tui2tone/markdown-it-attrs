@@ -113,7 +113,7 @@ module.exports = function attributes(md) {
         var correspondingBlock = firstTokenNotHidden(tokens, i - 1);
         if (nextLastInline && nextLastInline.type === 'softbreak' &&
             correspondingBlock && correspondingBlock.type === 'list_item_open') {
-          utils.addAttrs(attrs, bulletListOpen(tokens, i - 1));
+          utils.addAttrs(attrs, bulletListOpen(tokens, 0));
           // remove softbreak and {} inline tokens
           tokens[i].children = inlineTokens.slice(0, -2);
           tokens[i].content = removeCurly(tokens[i].content);
