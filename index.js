@@ -111,9 +111,10 @@ module.exports = function attributes(md) {
         var nextLastInline = nextLast(inlineTokens);
         // some blocks are hidden, example li > paragraph_open
         var correspondingBlock = firstTokenNotHidden(tokens, i - 1);
+        console.log(correspondingBlock)
         if (nextLastInline && nextLastInline.type === 'softbreak' &&
             correspondingBlock && correspondingBlock.type === 'list_item_open') {
-          utils.addAttrs(attrs, bulletListOpen(tokens, 0));
+          utils.addAttrs(attrs, bulletListOpen(tokens, i - 1, correspondingBlock));
           // remove softbreak and {} inline tokens
           tokens[i].children = inlineTokens.slice(0, -2);
           tokens[i].content = removeCurly(tokens[i].content);
@@ -171,9 +172,14 @@ function firstTokenNotHidden(tokens, i) {
  * Find first bullet list open.
  */
 
-function bulletListOpen(tokens, i) {
-  if (tokens.length - 1 > i && tokens[i] && tokens[i].type !== 'bullet_list_open') {
-    return bulletListOpen(tokens, i + 1);
+function bulletListOpen(tokens, i, correspondingBlock) {
+  if (i > 0 && tokens[i] && tokens[i].type !== 'bullet_list_open') {
+    return bulletListOpen(tokens, i - 1, correspondingBlock);
+  }
+  console.log(correspondingBlock.level)
+  console.log(tokens[i].level)
+  if(i > 0 && correspondingBlock.level != tokens[i].level + 1 ) {
+    return bulletListOpen(tokens, i - 1, correspondingBlock);
   }
   return tokens[i];
 }
